@@ -1,0 +1,107 @@
+-- Geethanjali Padmaperuma - SQL Week 1 HW
+-- Question 1 -> List of all the destinations with furthest distance.
+-- Honolulu (HNL) with a distance of 4983
+select * from flights where distance = (select max(distance) from flights);
+/*############################################################################################################################*/
+
+-- Question 2.1 -> What are the different numbers of engines in the planes?
+-- Turbo-fan (2750), Turbo-jet(535), Reciproating(28), 4 Cycle(2), Turbo-shaft(5), Turbo-prop(2)
+select distinct engine, count(*) as "#ofEngines" from planes group by engine;
+-- Question 2.2 -> Which aircraft have the most number of seats?
+-- Boeing 747-451 with Turbo-jet engine has the most number of seats (450)
+select distinct engine, seats, manufacturer, model, count(*) as "#ofEngines" from planes 
+where seats = (select max(seats) from planes)
+group by engine;
+/*############################################################################################################*/
+
+-- Question 3 -> Total number of flights
+-- 2148
+select count(distinct flight) from flights;
+/*###############################################################################################################*/
+
+-- Question 4 -> Total number of flights b airline(carrier)
+/*
+9E	146
+AA	154
+AS	4
+B6	298
+DL	251
+EV	472
+F9	6
+FL	14
+HA	1
+MQ	158
+OO	1
+UA	773
+US	179
+VX	19
+WN	226
+YV	4 */
+select distinct carrier, count(distinct flight) as "#ofFlights" from flights
+group by carrier;
+/*##############################################################################################################*/
+
+-- Question 5 -> All the airlines, ordered by number of flights in descending order
+select distinct airlines.carrier, flights.flight from airlines join flights
+where airlines.carrier = flights.carrier
+order by flight desc;
+
+/*##############################################################################################################*/
+
+-- Question 6 -> Top 5 airlines, by number of flights, ordered by number of flights in descending order
+-- UA, EV, B6, DL, WN
+select distinct airlines.carrier, flights.flight, count(distinct flights.flight) as "#ofFlights" from airlines join flights
+where airlines.carrier = flights.carrier
+group by airlines.carrier
+order by count(distinct flights.flight) desc
+limit 5;
+
+/*###############################################################################################################*/
+
+-- Question 7 -> Top 5 airlines, by number of flights of distance 1000 miles or greater, ordered by number of flights in descending order
+/*
+carrier flight distance #ofFlights
+UA	1580	2227	594
+B6	525		1005	165
+DL	329		1598	154
+AA	1709	1096	113
+WN	209		1620	65
+*/
+select distinct airlines.carrier, flights.flight, flights.distance,count(distinct flights.flight) as "#ofFlights" from airlines join flights
+where airlines.carrier = flights.carrier and flights.distance >= 1000
+group by airlines.carrier
+order by count(distinct flights.flight) desc
+limit 5;
+/*###############################################################################################################*/
+
+-- Question 8 (a) -> List all the tail numbers, number of flights ordered by their manufacturers in acending order
+/*
+N608QX	BOMBARDIER INC	250
+N829AS	CANADAIR	13
+N840MQ	CANADAIR LTD	19
+N621AA	CESSNA	69
+N508JB	CIRRUS DESIGN CORP	31
+N567AA	DEHAVILLAND	5
+N381AA	DOUGLAS	3
+N348JB	EMBRAER	539
+N544AA	FRIEDEMANN JON	7
+N711MQ	GULFSTREAM AEROSPACE	28
+N517AA	HURLEY JAMES LARRY	3
+N520AA	KILDALL GARY	4
+N528AA	LAMBERT RICHARD	7
+N398AA	LEARJET INC	2
+N551AA	LEBLANC GLENN T	6
+N557AA	MARZ BARRY	7
+N493AA	MCDONNELL DOUGLAS	49
+N924DL	MCDONNELL DOUGLAS AIRCRAFT CO	84
+N907DE	MCDONNELL DOUGLAS CORPORATION	30
+N377AA	PAIR MIKE E	4
+N525AA	PIPER	8
+N537JB	ROBINSON HELICOPTER CO	33
+N347AA	SIKORSKY	2
+N521AA	STEWART MACO	5
+*/
+select distinct flights.tailnum, planes.manufacturer, count(distinct flights.flight) as "#ofFlights" from flights join planes
+where flights.tailnum = planes.tailnum
+group by planes.manufacturer
+order by  planes.manufacturer asc;
