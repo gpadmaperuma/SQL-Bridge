@@ -1,0 +1,44 @@
+use howto;
+drop table videos;
+CREATE TABLE videos (
+ID int, 
+title varchar (2083) NOT NULL,
+length decimal (5,2),
+link varchar (2083),
+primary key (ID)
+);
+
+CREATE TABLE reviewers (
+  rID int,
+  ID int references videos(ID),
+  name varchar(30) NOT NULL,
+  rate integer,
+  review varchar (2018),
+  primary key (rID)
+  );
+insert into videos values('001', "How to make tutorial videos", "7.25", "https://www.youtube.com/watch?v=BDliEq_0qeQ");
+insert into videos values('002', "How to create table in SQL | How to create table in SQL SERVER 2012", "6.01", "https://www.youtube.com/watch?v=_1iyXaYgdmg");
+insert into videos values('003', "How to Create a Database in MySQL (MySQL Create Database)", "10.26", "https://www.youtube.com/watch?v=fHMh27nluTg");
+insert into videos values('004', "HOW TO REMODEL A SMALL BATHROOM", "8.07", "https://www.youtube.com/watch?v=xcn7PqUHYrI");
+insert into videos values('005', "How to Remodel Your Kitchen on a Budget", "4.41", "https://www.youtube.com/watch?v=fdIHv457OKU");
+insert into videos values('006', "Learn Pivot Tables in 6 Minutes (Microsoft Excel)", "6.21", "https://www.youtube.com/watch?v=qu-AK0Hv0b4");
+insert into videos values('007', "How to act in an interview", "3.06", "https://www.youtube.com/watch?v=E78k_XDjFLA");
+insert into videos values('008', "How to braid your hair 6 Cute braid for beginners", "5.42", "https://www.youtube.com/watch?v=xCUA4iS6hOE");
+insert into videos values('009', "How to Landscape a Small Urban Yard", "6.08", "https://www.youtube.com/watch?v=h4rtB3jK_oc");
+insert into videos values('010', "How To Build A Small Home Without Borrowing Money", "18.30", "https://www.youtube.com/watch?v=S9w-aNU3BF8");
+
+select * from videos;
+
+
+insert into reviewers values('100', '001', 'chad', '5', "Thank you! Helps me alot as a tutorial youtuber
+");
+insert into reviewers values('100', '002', 'chad', '3', "Ok video, need more information");
+insert into reviewers values('101', '001', 'ashleyk','4',"thanks, very useful tips");
+insert into reviewers values('102', '004', 'handyman','4', "Great video");
+insert into reviewers values('103', '004', 'DIYrachel','2', "Did not give much useful tips");
+insert into reviewers values('103', '009', 'DIYrachel','5', "Very Helpful information");
+insert into reviewers values('103', '010', 'DIYrachel','4', "A-Z on how to build a house");
+insert into reviewers values('104', '007', 'newbee','3', "I need more tips than that");
+
+select * from reviewers
+	join videos on reviewers.ID = videos.ID;
